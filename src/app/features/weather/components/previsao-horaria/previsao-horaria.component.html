@@ -1,0 +1,22 @@
+<mat-card *ngIf="dadosPrevisao" class="cartao-horario">
+    <mat-card-header>
+        <mat-card-title class="titulo-horario">
+            <mat-icon>schedule</mat-icon>
+            Previsão Horária (Próximas 24h)
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <div class="container-grafico">
+            <div class="wrapper-grafico">
+                <h3 class="titulo-grafico">Variação de Temperatura</h3>
+                <canvas #graficoTemperatura></canvas>
+            </div>
+
+            <div class="wrapper-grafico">
+                <h3 class="titulo-grafico">Probabilidade de Chuva</h3>
+                <canvas #graficoChuva></canvas>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,195 @@
+<mat-card *ngIf="dadosPrevisao" class="details-card">
+    <mat-card-header>
+        <mat-card-title class="details-title">
+            <mat-icon>analytics</mat-icon>
+            Detalhes e Análises
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <mat-tab-group class="details-tabs" backgroundColor="primary" color="accent">
+            <mat-tab label="Índices">
+                <div class="tab-content">
+                    <div class="indices-grid">
+                        <div class="index-card" *ngIf="dadosPrevisao.atual">
+                            <div class="index-header">
+                                <mat-icon>wb_sunny</mat-icon>
+                                <span class="index-title">Índice UV</span>
+                            </div>
+                            <div class="index-value" [style.color]="obterCorUV(dadosPrevisao.atual.uv)">
+                                {{ dadosPrevisao.atual.uv }}
+                            </div>
+                            <div class="index-level" [style.background]="obterCorUV(dadosPrevisao.atual.uv)">
+                                {{ obterNivelUV(dadosPrevisao.atual.uv) }}
+                            </div>
+                            <p class="index-description">
+                                <span *ngIf="dadosPrevisao.atual.uv <= 2">Baixo risco. Pode permanecer ao ar livre sem
+                                    proteção.</span>
+                                <span *ngIf="dadosPrevisao.atual.uv > 2 && dadosPrevisao.atual.uv <= 5">Risco
+                                    moderado. Use protetor solar.</span>
+                                <span *ngIf="dadosPrevisao.atual.uv > 5 && dadosPrevisao.atual.uv <= 7">Alto risco.
+                                    Proteção essencial.</span>
+                                <span *ngIf="dadosPrevisao.atual.uv > 7">Risco extremo. Evite exposição ao sol.</span>
+                            </p>
+                        </div>
+
+                        <div class="index-card" *ngIf="dadosPrevisao?.atual?.qualidade_ar as qa">
+                            <div class="index-header">
+                                <mat-icon>air</mat-icon>
+                                <span class="index-title">Qualidade do Ar</span>
+                            </div>
+                            <div class="index-value">{{ qa['us-epa-index'] }}</div>
+                            <div class="index-level" [class.good]="qa['us-epa-index'] <= 2"
+                                [class.moderate]="qa['us-epa-index'] === 3" [class.bad]="qa['us-epa-index'] >= 4">
+                                {{ obterQualidadeArReal() }}
+                            </div>
+                            <p class="index-description">Índice EPA dos EUA. PM2.5: {{ qa.pm2_5 | number:'1.1-1' }}
+                                µg/m³</p>
+                        </div>
+
+                        <div class="index-card" *ngIf="dadosPrevisao.atual">
+                            <div class="index-header">
+                                <mat-icon>mood</mat-icon>
+                                <span class="index-title">Nível de Conforto</span>
+                            </div>
+                            <div class="index-value">{{ dadosPrevisao.atual.temp_c | number:'1.0-0' }}°C</div>
+                            <div class="index-level" [class.comfortable]="obterNivelConforto() === 'Confortável'"
+                                [class.moderate]="obterNivelConforto() === 'Moderado' || obterNivelConforto() === 'Frio'"
+                                [class.uncomfortable]="obterNivelConforto() === 'Desconfortável'">
+                                {{ obterNivelConforto() }}
+                            </div>
+                            <p class="index-description">Baseado em temperatura e umidade.</p>
+                        </div>
+
+                        <div class="index-card" *ngIf="dadosPrevisao.atual">
+                            <div class="index-header">
+                                <mat-icon>compress</mat-icon>
+                                <span class="index-title">Pressão Atmosférica</span>
+                            </div>
+                            <div class="index-value">{{ dadosPrevisao.atual.pressao_mb }} mb</div>
+                            <div class="index-level"
+                                [class.normal]="dadosPrevisao.atual.pressao_mb >= 1010 && dadosPrevisao.atual.pressao_mb <= 1020"
+                                [class.low]="dadosPrevisao.atual.pressao_mb < 1010"
+                                [class.high]="dadosPrevisao.atual.pressao_mb > 1020">
+                                <span *ngIf="dadosPrevisao.atual.pressao_mb < 1010">Baixa</span>
+                                <span
+                                    *ngIf="dadosPrevisao.atual.pressao_mb >= 1010 && dadosPrevisao.atual.pressao_mb <= 1020">Normal</span>
+                                <span *ngIf="dadosPrevisao.atual.pressao_mb > 1020">Alta</span>
+                            </div>
+                            <p class="index-description">
+                                <span *ngIf="dadosPrevisao.atual.pressao_mb < 1010">Pode indicar tempo
+                                    instável.</span>
+                                <span
+                                    *ngIf="dadosPrevisao.atual.pressao_mb >= 1010 && dadosPrevisao.atual.pressao_mb <= 1020">Condições
+                                    estáveis.</span>
+                                <span *ngIf="dadosPrevisao.atual.pressao_mb > 1020">Tempo estável e seco.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Astronomia" *ngIf="previsaoHoje">
+                <div class="tab-content">
+                    <div class="astro-grid">
+                        <div class="astro-card">
+                            <mat-icon class="astro-icon sun">wb_sunny</mat-icon>
+                            <h3>Sol</h3>
+                            <div class="astro-info">
+                                <div class="astro-item">
+                                    <span class="astro-label">Nascer do Sol</span>
+                                    <span class="astro-value">{{ previsaoHoje.astro.nascerSol }}</span>
+                                </div>
+                                <div class="astro-item">
+                                    <span class="astro-label">Pôr do Sol</span>
+                                    <span class="astro-value">{{ previsaoHoje.astro.porSol }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="astro-card">
+                            <mat-icon class="astro-icon moon">nights_stay</mat-icon>
+                            <h3>Lua</h3>
+                            <div class="astro-info">
+                                <div class="astro-item">
+                                    <span class="astro-label">Nascer da Lua</span>
+                                    <span class="astro-value">{{ previsaoHoje.astro.nascerLua }}</span>
+                                </div>
+                                <div class="astro-item">
+                                    <span class="astro-label">Pôr da Lua</span>
+                                    <span class="astro-value">{{ previsaoHoje.astro.porLua }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Qualidade do Ar" *ngIf="dadosPrevisao?.atual?.qualidade_ar as qa">
+                <div class="tab-content">
+                    <div class="air-quality-grid">
+                        <div class="pollutant-card">
+                            <div class="pollutant-header">
+                                <span class="pollutant-name">PM2.5</span>
+                                <span class="pollutant-value">{{ qa.pm2_5 | number:'1.1-1' }} µg/m³</span>
+                            </div>
+                            <div class="pollutant-bar">
+                                <div class="pollutant-fill" [style.width.%]="calcularPorcentagemPM25(qa.pm2_5)"></div>
+                            </div>
+                        </div>
+
+                        <div class="pollutant-card">
+                            <div class="pollutant-header">
+                                <span class="pollutant-name">PM10</span>
+                                <span class="pollutant-value">{{ qa.pm10 | number:'1.1-1' }} µg/m³</span>
+                            </div>
+                            <div class="pollutant-bar">
+                                <div class="pollutant-fill" [style.width.%]="calcularPorcentagemPM10(qa.pm10)"></div>
+                            </div>
+                        </div>
+
+                        <div class="pollutant-card">
+                            <div class="pollutant-header">
+                                <span class="pollutant-name">CO</span>
+                                <span class="pollutant-value">{{ qa.co | number:'1.1-1' }} µg/m³</span>
+                            </div>
+                            <div class="pollutant-bar">
+                                <div class="pollutant-fill" [style.width.%]="calcularPorcentagemCO(qa.co)"></div>
+                            </div>
+                        </div>
+
+                        <div class="pollutant-card">
+                            <div class="pollutant-header">
+                                <span class="pollutant-name">NO₂</span>
+                                <span class="pollutant-value">{{ qa.no2 | number:'1.1-1' }} µg/m³</span>
+                            </div>
+                            <div class="pollutant-bar">
+                                <div class="pollutant-fill" [style.width.%]="calcularPorcentagemNO2(qa.no2)"></div>
+                            </div>
+                        </div>
+
+                        <div class="pollutant-card">
+                            <div class="pollutant-header">
+                                <span class="pollutant-name">SO₂</span>
+                                <span class="pollutant-value">{{ qa.so2 | number:'1.1-1' }} µg/m³</span>
+                            </div>
+                            <div class="pollutant-bar">
+                                <div class="pollutant-fill" [style.width.%]="calcularPorcentagemSO2(qa.so2)"></div>
+                            </div>
+                        </div>
+
+                        <div class="pollutant-card">
+                            <div class="pollutant-header">
+                                <span class="pollutant-name">O₃</span>
+                                <span class="pollutant-value">{{ qa.o3 | number:'1.1-1' }} µg/m³</span>
+                            </div>
+                            <div class="pollutant-bar">
+                                <div class="pollutant-fill" [style.width.%]="calcularPorcentagemO3(qa.o3)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,109 @@
+<div class="container-clima">
+    <header class="cabecalho">
+        <h1 class="titulo-app">
+            <span class="material-symbols-outlined icone-cabecalho">
+                partly_cloudy_day
+            </span>
+            Weatherfy
+        </h1>
+        <p class="subtitulo">Acompanhe o clima em tempo real</p>
+        <app-search-location (buscarCidade)="carregarClimaPorCidade($event)"
+            (obterLocalizacaoAtual)="carregarClimaLocalizacaoAtual()">
+        </app-search-location>
+
+        <div *ngIf="ultimaAtualizacao" class="info-atualizacao">
+            <div class="texto-atualizacao">
+                <mat-icon class="icone-atualizacao">schedule</mat-icon>
+                <span>Última atualização: {{ formatarTempoAtualizacao() }}</span>
+                <span class="proxima-atualizacao">Próxima em: {{ formatarProximaAtualizacao() }}</span>
+            </div>
+            <button mat-icon-button (click)="atualizarManualmente()" matTooltip="Atualizar agora"
+                class="botao-atualizar">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </div>
+    </header>
+
+
+
+    <div *ngIf="carregando" class="container-carregamento">
+        <mat-spinner diameter="60"></mat-spinner>
+        <p>Carregando dados do clima...</p>
+    </div>
+
+    <div *ngIf="erro && !carregando" class="container-erro">
+        <p>Não foi possível carregar os dados do clima.</p>
+        <p>Tente novamente ou busque por outra localização.</p>
+    </div>
+
+    <div *ngIf="!carregando && !erro" class="conteudo-clima">
+        <div class="clima-atual-centralizado">
+            <app-current-weather [dadosClima]="climaAtual"></app-current-weather>
+
+            <div *ngIf="previsao" class="secao-estatisticas">
+                <div class="cartao-estatistica">
+                    <mat-icon class="icone-estatistica">thermostat</mat-icon>
+                    <div class="conteudo-estatistica">
+                        <span class="rotulo-estatistica">Variação Térmica (12h)</span>
+                        <span class="valor-estatistica">{{ obterEstatisticas()?.minTemp | number:'1.0-0' }}°C - {{
+                            obterEstatisticas()?.maxTemp | number:'1.0-0' }}°C</span>
+                    </div>
+                </div>
+
+                <div class="cartao-estatistica">
+                    <mat-icon class="icone-estatistica">water_drop</mat-icon>
+                    <div class="conteudo-estatistica">
+                        <span class="rotulo-estatistica">Umidade Média</span>
+                        <span class="valor-estatistica">{{ obterEstatisticas()?.mediaUmidade }}%</span>
+                    </div>
+                </div>
+
+                <div class="cartao-estatistica">
+                    <mat-icon class="icone-estatistica">air</mat-icon>
+                    <div class="conteudo-estatistica">
+                        <span class="rotulo-estatistica">Rajada Máxima</span>
+                        <span class="valor-estatistica">{{ obterEstatisticas()?.maxVento | number:'1.0-1' }} km/h</span>
+                    </div>
+                </div>
+
+                <div class="cartao-estatistica">
+                    <mat-icon class="icone-estatistica">opacity</mat-icon>
+                    <div class="conteudo-estatistica">
+                        <span class="rotulo-estatistica">Probabilidade de Chuva</span>
+                        <span class="valor-estatistica">{{ obterEstatisticas()?.totalChuva | number:'1.0-0' }}%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-weather-forecast [dadosPrevisao]="previsao"></app-weather-forecast>
+        <app-hourly-forecast [dadosPrevisao]="previsao"></app-hourly-forecast>
+        <app-weather-details [dadosPrevisao]="previsao"></app-weather-details>
+    </div>
+
+    <div *ngIf="(previsao?.alertas?.length ?? 0) > 0" class="secao-alertas">
+        <mat-card class="cartao-alerta">
+            <mat-card-header>
+                <mat-card-title class="titulo-alerta">
+                    <mat-icon class="icone-alerta">warning</mat-icon>
+                    Alertas Meteorológicos
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div *ngFor="let alerta of previsao?.alertas" class="item-alerta">
+                    <div class="cabecalho-alerta">
+                        <h4>{{ alerta.headline }}</h4>
+                        <span class="severidade-alerta" [class]="alerta.severity.toLowerCase()">{{ alerta.severity
+                            }}</span>
+                    </div>
+                    <p class="descricao-alerta">{{ alerta.desc }}</p>
+                    <p *ngIf="alerta.instruction" class="instrucao-alerta">{{ alerta.instruction }}</p>
+                    <div class="meta-alerta">
+                        <span>De: {{ alerta.effective }}</span>
+                        <span>Até: {{ alerta.expires }}</span>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

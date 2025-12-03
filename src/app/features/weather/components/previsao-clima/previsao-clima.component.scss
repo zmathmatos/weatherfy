@@ -1,0 +1,428 @@
+.wrapper-previsao {
+  width: 100%;
+  animation: slideIn 0.5s ease-out;
+  padding: 2rem 0;
+  position: relative;
+
+  .botao-carrossel {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    z-index: 10;
+
+    &.anterior {
+      left: 20rem;
+
+      @media (max-width: 1600px) {
+        left: 15rem;
+      }
+
+      @media (max-width: 1400px) {
+        left: 10rem;
+      }
+
+      @media (max-width: 1200px) {
+        left: 5rem;
+      }
+
+      @media (max-width: 992px) {
+        left: 2rem;
+      }
+
+      @media (max-width: 768px) {
+        left: 0.5rem;
+      }
+    }
+
+    &.proximo {
+      right: 20rem;
+
+      @media (max-width: 1600px) {
+        right: 15rem;
+      }
+
+      @media (max-width: 1400px) {
+        right: 10rem;
+      }
+
+      @media (max-width: 1200px) {
+        right: 5rem;
+      }
+
+      @media (max-width: 992px) {
+        right: 2rem;
+      }
+
+      @media (max-width: 768px) {
+        right: 0.5rem;
+      }
+    }
+
+    &:hover:not(.disabled) {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    &:active:not(.disabled) {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    &.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container-previsao {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 0 4rem;
+  overflow: visible;
+
+  @media (max-width: 1200px) {
+    gap: 12px;
+    padding: 0 3rem;
+  }
+
+  @media (max-width: 992px) {
+    gap: 10px;
+    padding: 0 2rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 8px;
+    padding: 3rem 1rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    justify-content: flex-start;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.item-previsao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  background: rgb(9 9 9 / 28%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 140px;
+  flex-shrink: 0;
+  gap: 0.5rem;
+  position: relative;
+  overflow: visible;
+  animation: fadeInUp 0.5s ease-out;
+  animation-fill-mode: both;
+
+  @media (max-width: 992px) {
+    min-width: 120px;
+    padding: 0.875rem 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    min-width: 110px;
+    padding: 0.75rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    min-width: 100px;
+    padding: 0.625rem 0.875rem;
+  }
+
+  @for $i from 1 through 7 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+
+  &.primeiro {
+    background: rgb(9 9 9 / 28%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &.selecionado {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+
+    .detalhes-hover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    &:hover {
+      transform: none;
+      background: rgb(9 9 9 / 28%);
+      box-shadow: none;
+    }
+  }
+
+  .cabecalho-cartao {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .rotulo-dia {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .nome-dia {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: white;
+    text-transform: lowercase;
+  }
+
+  .icone-previsao {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 992px) {
+      width: 70px;
+      height: 70px;
+    }
+
+    @media (max-width: 768px) {
+      width: 60px;
+      height: 60px;
+    }
+
+    @media (max-width: 480px) {
+      width: 50px;
+      height: 50px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    }
+  }
+
+  .temperatura-previsao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .temperatura-maxima {
+      font-size: 2rem;
+      font-weight: 300;
+      color: white;
+
+      @media (max-width: 992px) {
+        font-size: 1.75rem;
+      }
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 1.35rem;
+      }
+    }
+  }
+
+  .temperatura-minima-previsao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .temperatura-minima {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.6);
+
+      @media (max-width: 992px) {
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .detalhes-hover {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(30, 30, 40, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem;
+    min-width: 200px;
+    max-width: 90vw;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+    margin-top: 0.5rem;
+
+    @media (max-width: 768px) {
+      display: block;
+      position: relative;
+      top: auto;
+      left: auto;
+      right: auto;
+      transform: none;
+      margin-top: 1rem;
+      min-width: auto;
+      max-width: 100%;
+      opacity: 1;
+      visibility: visible;
+      background: transparent;
+      backdrop-filter: none;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    .item-previsao:first-child &,
+    .item-previsao:nth-child(2) & {
+      left: 0;
+      transform: translateX(0) translateY(10px);
+
+      @media (max-width: 768px) {
+        transform: none;
+      }
+    }
+
+    .item-previsao:last-child &,
+    .item-previsao:nth-last-child(2) & {
+      left: auto;
+      right: 0;
+      transform: translateX(0) translateY(10px);
+
+      @media (max-width: 768px) {
+        left: auto;
+        right: auto;
+        transform: none;
+      }
+    }
+
+    .item-detalhe {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+
+      .rotulo-detalhe {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+      }
+
+      .valor-detalhe {
+        font-size: 0.85rem;
+        color: white;
+        font-weight: 600;
+      }
+    }
+
+    .linha-astro {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+      .detalhe-astro {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+}

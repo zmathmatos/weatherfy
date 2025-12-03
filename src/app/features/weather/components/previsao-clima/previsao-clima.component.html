@@ -1,0 +1,61 @@
+<div *ngIf="dadosPrevisao" class="wrapper-previsao">
+    <button class="botao-carrossel anterior" (click)="rolarCarrossel(-1)" [disabled]="!podeVoltar"
+        [class.disabled]="!podeVoltar">
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div class="container-previsao" #containerCarrossel>
+        <div *ngFor="let dia of obterPrevisoesDiarias(); let i = index" class="item-previsao"
+            [class.primeiro]="ehHoje(dia.data)" [class.selecionado]="ehDiaSelecionado(i)" (click)="selecionarDia(i)">
+            <div class="cabecalho-cartao">
+                <div class="rotulo-dia">{{ obterDiaDoMes(dia.data) }}</div>
+                <div class="nome-dia">{{ formatarDiaSemana(dia.data) }}</div>
+            </div>
+            <div class="icone-previsao">
+                <img [src]="obterUrlIconeClima(dia.dia.condicao.icone)" [alt]="dia.dia.condicao.texto">
+            </div>
+            <div class="temperatura-previsao">
+                <span class="temperatura-maxima">{{ dia.dia.maxTemp_c | number:'1.0-0' }}°</span>
+            </div>
+            <div class="temperatura-minima-previsao">
+                <span class="temperatura-minima">{{ dia.dia.minTemp_c | number:'1.0-0' }}°</span>
+            </div>
+
+            <div class="detalhes-hover">
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Condição</span>
+                    <span class="valor-detalhe">{{ dia.dia.condicao.texto }}</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Chuva</span>
+                    <span class="valor-detalhe">{{ dia.dia.diaria_chuva }}%</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Umidade</span>
+                    <span class="valor-detalhe">{{ dia.dia.mediaUmidade }}%</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">Vento</span>
+                    <span class="valor-detalhe">{{ dia.dia.maxVento_kph | number:'1.0-0' }} km/h</span>
+                </div>
+                <div class="item-detalhe">
+                    <span class="rotulo-detalhe">UV</span>
+                    <span class="valor-detalhe">Índice {{ dia.dia.uv }}</span>
+                </div>
+                <div class="linha-astro">
+                    <div class="detalhe-astro">
+                        <span>☀️ {{ dia.astro.nascerSol }}</span>
+                    </div>
+                    <div class="detalhe-astro">
+                        <span>🌙 {{ dia.astro.porSol }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="botao-carrossel proximo" (click)="rolarCarrossel(1)" [disabled]="!podeAvancar"
+        [class.disabled]="!podeAvancar">
+        <mat-icon>chevron_right</mat-icon>
+    </button>
+</div>

@@ -1,0 +1,66 @@
+<div *ngIf="dadosClima" class="layout-clima">
+    <mat-card class="cartao-clima">
+        <mat-card-content>
+            <div class="secao-cabecalho">
+                <div class="info-localizacao">
+                    <h2 class="titulo-localizacao">{{ dadosClima.localizacao.nome }}, {{ dadosClima.localizacao.pais }}
+                    </h2>
+                    <p class="hora-atual">{{ obterHoraAtual() }}</p>
+                </div>
+            </div>
+
+            <div class="secao-temperatura">
+                <div class="icone-temperatura">
+                    <img [src]="obterUrlIconeClima(dadosClima.atual.condicao.icone)"
+                        [alt]="dadosClima.atual.condicao.texto" class="icone-clima">
+                </div>
+                <div class="info-temperatura">
+                    <div class="valor-temperatura">{{ dadosClima.atual.temp_c | number:'1.0-0' }}°C</div>
+                    <div class="condicao-clima">{{ dadosClima.atual.condicao.texto }}</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <div class="grade-detalhes">
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Qualidade do ar</span>
+            <span class="valor-detalhe qualidade">🟡 {{ obterQualidadeAr() }}</span>
+        </div>
+
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Vento</span>
+            <span class="valor-detalhe">{{ dadosClima.atual.vento_kph | number:'1.0-0' }} km/h ↗️</span>
+        </div>
+
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Umidade</span>
+            <span class="valor-detalhe">{{ dadosClima.atual.umidade }}%</span>
+        </div>
+
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Sensação térmica</span>
+            <span class="valor-detalhe">{{ dadosClima.atual.sensacao_c | number:'1.0-0' }}°</span>
+        </div>
+
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Visibilidade</span>
+            <span class="valor-detalhe">{{ dadosClima.atual.vis_km }} km</span>
+        </div>
+
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Índice UV</span>
+            <span class="valor-detalhe">{{ dadosClima.atual.uv }}</span>
+        </div>
+
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Pressão</span>
+            <span class="valor-detalhe">{{ dadosClima.atual.pressao_mb }} mb</span>
+        </div>
+
+        <div class="caixa-detalhe">
+            <span class="rotulo-detalhe">Ponto de orvalho</span>
+            <span class="valor-detalhe">{{ calcularPontoOrvalho() }}°</span>
+        </div>
+    </div>
+</div>

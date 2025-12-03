@@ -1,0 +1,175 @@
+.layout-clima {
+  display: flex;
+  gap: 1.5rem;
+  max-width: 1200px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.cartao-clima {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: white;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  ::ng-deep {
+    .mat-mdc-card {
+      background: transparent;
+      color: white;
+    }
+
+    .mat-mdc-card-content {
+      padding: 1.5rem;
+    }
+  }
+}
+
+.secao-cabecalho {
+  margin-bottom: 1.5rem;
+  text-align: left;
+
+  .info-localizacao {
+    .titulo-localizacao {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 0 0 0.25rem 0;
+      color: white;
+      text-align: left;
+    }
+
+    .hora-atual {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+      text-align: left;
+    }
+  }
+}
+
+.secao-temperatura {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  .icone-temperatura {
+    .icone-clima {
+      width: 120px;
+      height: 120px;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    }
+  }
+
+  .info-temperatura {
+    text-align: center;
+
+    .valor-temperatura {
+      font-size: 4rem;
+      font-weight: 200;
+      line-height: 1;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    .condicao-clima {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: capitalize;
+    }
+  }
+}
+
+.grade-detalhes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0.75rem;
+  flex: 1;
+
+  .caixa-detalhe {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .rotulo-detalhe {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.3s ease;
+    }
+
+    .valor-detalhe {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: white;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: transform 0.3s ease;
+
+      &.qualidade {
+        font-size: 0.9rem;
+      }
+    }
+
+    &:hover .rotulo-detalhe {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    &:hover .valor-detalhe {
+      transform: scale(1.05);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .layout-clima {
+    flex-direction: column;
+  }
+
+  .secao-temperatura {
+    .icone-temperatura {
+      .icone-clima {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    .info-temperatura {
+      .valor-temperatura {
+        font-size: 3.5rem;
+      }
+    }
+  }
+
+  .grade-detalhes {
+    width: 100%;
+  }
+}
